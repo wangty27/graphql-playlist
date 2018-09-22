@@ -1,2 +1,2 @@
-# learn-graphql
+# graphql-playlist
 * Simple GraphQL Project following YouTube Tutorial
