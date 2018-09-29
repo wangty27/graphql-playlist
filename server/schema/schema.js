@@ -14,21 +14,21 @@ const {
   GraphQLSchema,
 } = graphql;
 
-// dummy data
-var Books = [
-  { id: '1', name: 'Name of the Wind', genre: 'Fantasy', authorId: '1' },
-  { id: '2', name: 'The Final Empire', genre: 'Fantasy', authorId: '2' },
-  { id: '3', name: 'The Long Earth', genre: 'Sci-Fi', authorId: '3' },
-  { id: '4', name: 'The Hero of Ages', genre: 'Fantasy', authorId: '2' },
-  { id: '5', name: 'The Colour of Magic', genre: 'Fantasy', authorId: '3' },
-  { id: '6', name: 'The Light Fantastic', genre: 'Fantasy', authorId: '3' },
-];
-
-var Authors = [
-  { id: '1', name: 'Patrick Rothfuss', age: 44 },
-  { id: '2', name: 'Brandon Sanderson', age: 42 },
-  { id: '3', name: 'Terry Pratchett', age: 66 },
-]
+// // dummy data
+// var Books = [
+//   { id: '1', name: 'Name of the Wind', genre: 'Fantasy', authorId: '1' },
+//   { id: '2', name: 'The Final Empire', genre: 'Fantasy', authorId: '2' },
+//   { id: '3', name: 'The Long Earth', genre: 'Sci-Fi', authorId: '3' },
+//   { id: '4', name: 'The Hero of Ages', genre: 'Fantasy', authorId: '2' },
+//   { id: '5', name: 'The Colour of Magic', genre: 'Fantasy', authorId: '3' },
+//   { id: '6', name: 'The Light Fantastic', genre: 'Fantasy', authorId: '3' },
+// ];
+//
+// var Authors = [
+//   { id: '1', name: 'Patrick Rothfuss', age: 44 },
+//   { id: '2', name: 'Brandon Sanderson', age: 42 },
+//   { id: '3', name: 'Terry Pratchett', age: 66 },
+// ]
 
 const BookType = new GraphQLObjectType({
   name: 'Book',
@@ -39,8 +39,8 @@ const BookType = new GraphQLObjectType({
     author: {
       type: AuthorType,
       resolve(parent, args) {
-        // return Author.findById(parent.authorId);
-        return _.find(Authors, { id: parent.authorId });
+        return Author.findById(parent.authorId);
+        // return _.find(Authors, { id: parent.authorId });
       }
     }
   })
@@ -55,8 +55,8 @@ const AuthorType = new GraphQLObjectType({
     books: {
       type: new GraphQLList(BookType),
       resolve(parent, args) {
-        // return Book.find({ authorId: parent.id });
-        return _.filter(Books, { authorId: parent.id });
+        return Book.find({ authorId: parent.id });
+        // return _.filter(Books, { authorId: parent.id });
       }
     }
   })
@@ -69,30 +69,30 @@ const RootQuery = new GraphQLObjectType({
       type: BookType,
       args: { id: { type: GraphQLID }},
       resolve(parent, args) {
-        // return Book.findById(args.id);
-        return _.find(Books, { id: args.id });
+        return Book.findById(args.id);
+        // return _.find(Books, { id: args.id });
       }
     },
     author: {
       type: AuthorType,
       args: { id: { type: GraphQLID }},
       resolve(parent, args) {
-        // return Author.findById(args.id);
-        return _.find(Authors, { id: args.id });
+        return Author.findById(args.id);
+        // return _.find(Authors, { id: args.id });
       }
     },
     books: {
       type: new GraphQLList(BookType),
       resolve(parent, args) {
-        // return Book.find({});
-        return Books;
+        return Book.find({});
+        // return Books;
       }
     },
     authors: {
       type: new GraphQLList(AuthorType),
       resolve(parent, args) {
-        // return Author.find({});
-        return Authors;
+        return Author.find({});
+        // return Authors;
       }
     }
   }
@@ -108,12 +108,12 @@ const Mutation = new GraphQLObjectType({
         age: { type: new GraphQLNonNull(GraphQLInt) },
       },
       resolve(parent, args) {
-        // let author = new Author({
-        //   name: args.name,
-        //   age: args.age
-        // });
-        // return author.save();
-        return 'New author';
+        let author = new Author({
+          name: args.name,
+          age: args.age
+        });
+        return author.save();
+        // return 'New author';
       }
     },
     addBook: {
@@ -124,13 +124,13 @@ const Mutation = new GraphQLObjectType({
         authorId: { type: new GraphQLNonNull(GraphQLID) }
       },
       resolve(parent, args) {
-        // let book = new Book({
-        //   name: args.name,
-        //   genre: args.genre,
-        //   authorId: args.authorId
-        // });
-        // return book.save();
-        return 'New book';
+        let book = new Book({
+          name: args.name,
+          genre: args.genre,
+          authorId: args.authorId
+        });
+        return book.save();
+        // return 'New book';
       }
     }
   }
